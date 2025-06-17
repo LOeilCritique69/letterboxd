@@ -204,3 +204,8 @@ if __name__ == "__main__":
     # Assure-toi d'installer 'requests' si ce n'est pas déjà fait : pip install requests
     # Dans ton terminal: pip install requests
     generate_html_from_rss(RSS_FEED_URL, OUTPUT_HTML_FILE)
+
+# ... (ton code Python de generate_site.py) ...
+# Assure-toi que cette ligne est correcte !
+RSS_FEED_URL = 'https://letterboxd.com/oni_le_chan/rss/'
+# ... (le reste du code) ...
