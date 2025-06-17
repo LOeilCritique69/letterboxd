@@ -1,20 +1,23 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mes films notés - Letterboxd</title>
-  <link rel="stylesheet" href="/static/style.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>L'œil Critique — Letterboxd</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Mes films notés sur Letterboxd</h1>
+    <h1>L'œil Critique</h1>
+    <p>📝 Critiques récentes depuis Letterboxd</p>
   </header>
-  <main>
-    <section id="film-list">
-      <p>Chargement des films...</p>
-    </section>
-  </main>
-  <script src="/static/script.js"></script>
+
+  <main id="films"></main>
+
+  <footer>
+    <p>Mis à jour automatiquement depuis Letterboxd – <a href="https://letterboxd.com/oni_le_chan/" target="_blank">Profil</a></p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
