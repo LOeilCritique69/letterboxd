@@ -1,0 +1,85 @@
+/* Reset simple */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
+
+body {
+  background: #121212;
+  color: #eee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+header {
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-weight: 700;
+  font-size: 2rem;
+  color: #e50914; /* Rouge Letterboxd */
+}
+
+#film-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill,minmax(180px,1fr));
+  gap: 20px;
+  width: 100%;
+  max-width: 1000px;
+}
+
+.film-card {
+  background: #1e1e1e;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.8);
+  overflow: hidden;
+  transition: transform 0.2s ease;
+  cursor: pointer;
+}
+
+.film-card:hover {
+  transform: scale(1.05);
+}
+
+.film-poster {
+  width: 100%;
+  display: block;
+  height: 270px;
+  object-fit: cover;
+}
+
+.film-info {
+  padding: 10px;
+}
+
+.film-title {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  color: #fff;
+}
+
+.film-rating {
+  color: #f5c518; /* couleur étoiles or */
+  font-weight: 600;
+}
+
+.film-link {
+  text-decoration: none;
+  color: #bbb;
+  font-size: 0.9rem;
+  display: block;
+  margin-top: 8px;
+  word-break: break-word;
+}
+
+.film-link:hover {
+  color: #e50914;
+  text-decoration: underline;
+}
