@@ -1,6 +1,7 @@
 import requests
 import xml.etree.ElementTree as ET
 import re
+import html # Assure-toi que cette ligne est bien présente au début
 
 # Ton URL de flux RSS Letterboxd
 RSS_FEED_URL = 'https://letterboxd.com/oni_le_chan/rss/' # Remplace par ton pseudo
@@ -11,12 +12,11 @@ OUTPUT_HTML_FILE = 'index.html'
 def generate_html_from_rss(rss_url, output_file):
     try:
         response = requests.get(rss_url)
-        response.raise_for_status()  # Lève une exception pour les codes d'état HTTP en erreur (4xx ou 5xx)
+        response.raise_for_status()
         root = ET.fromstring(response.content)
-        
+
     except requests.exceptions.RequestException as e:
-        print(f"Erreur de connexion au flux RSS: {e}")
-        # Générer une page d'erreur simple si le RSS ne peut pas être chargé
+        print(f"DEBUG: Erreur de connexion au flux RSS: {e}") # Debug print
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(f"""
 <!DOCTYPE html>
@@ -25,7 +25,8 @@ def generate_html_from_rss(rss_url, output_file):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erreur de Chargement</title>
-    <link rel="stylesheet" href="chef_d_oeuvre.css"> </head>
+    <link rel="stylesheet" href="chef_d_oeuvre.css">
+</head>
 <body>
     <div class="container">
         <h1>Oups ! Erreur de Chargement</h1>
@@ -37,7 +38,7 @@ def generate_html_from_rss(rss_url, output_file):
             """)
         return
     except ET.ParseError as e:
-        print(f"Erreur de parsing XML: {e}")
+        print(f"DEBUG: Erreur de parsing XML: {e}") # Debug print
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(f"""
 <!DOCTYPE html>
@@ -46,7 +47,8 @@ def generate_html_from_rss(rss_url, output_file):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erreur de Parsing</title>
-    <link rel="stylesheet" href="chef_d_oeuvre.css"> </head>
+    <link rel="stylesheet" href="chef_d_oeuvre.css">
+</head>
 <body>
     <div class="container">
         <h1>Oups ! Erreur de Parsing des Données</h1>
@@ -65,7 +67,8 @@ def generate_html_from_rss(rss_url, output_file):
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mes Films & Critiques Letterboxd - Oni Lechan</title>
-    <link rel="stylesheet" href="chef_d_oeuvre.css"> <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="chef_d_oeuvre.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="main-header">
@@ -82,12 +85,20 @@ def generate_html_from_rss(rss_url, output_file):
                 <h2 class="section-title">Dernières Critiques</h2>
                 <div class="film-grid">
 """
+    
+    # DEBUG : Compteur pour voir combien d'items sont traités
+    item_count = 0 
 
     for item in root.findall('.//item'):
+        item_count += 1 # Incrémente le compteur
+        
         full_title = item.find('title').text if item.find('title') is not None else ''
         link = item.find('link').text if item.find('link') is not None else '#'
         description_html = item.find('description').text if item.find('description') is not None else ''
         
+        # DEBUG : Affiche le titre de chaque film trouvé
+        print(f"DEBUG: Traitement du film: {full_title}") 
+
         # Extraire le titre du film et l'année
         match_title = re.match(r'^(.*?),\s*(\d{4})', full_title)
         film_title = match_title.group(1).strip() if match_title else full_title
@@ -118,11 +129,14 @@ def generate_html_from_rss(rss_url, output_file):
         # Extraire le texte de la critique de la description HTML
         review_text = description_html
         # Supprime tout avant le premier <p> après l'image (si l'image est bien dans un <p>)
-        review_text = re.sub(r'^.*?<p>(.*?)<\/p>', r'\1', review_text, 1, flags=re.DOTALL) 
+        review_text = re.sub(r'^.*?<p>(.*?)<\/p>', r'\1', review_text, 1, flags=re.DOTALL)
         review_text = re.sub(r'<[^>]+>', '', review_text).strip() # Supprime toutes les balises HTML restantes
         review_text = review_text.replace('&nbsp;', ' ').replace('&#8230;', '...').replace('…', '...') # Nettoyage des entités
         review_text = html.unescape(review_text) # Utilise html.unescape pour bien gérer toutes les entités HTML
         
+        # DEBUG : Affiche le texte de la critique extrait (les 100 premiers caractères)
+        print(f"DEBUG: Review text (first 100 chars): {review_text[:100]}...")
+
         formatted_review_text = review_text.replace('\n', '<br />')
 
         html_output += f"""
@@ -151,15 +165,12 @@ def generate_html_from_rss(rss_url, output_file):
 </body>
 </html>
 """
+    # DEBUG : Affiche le nombre total d'items traités
+    print(f"DEBUG: Nombre total de films traités: {item_count}") 
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html_output)
-    print(f"Site généré avec succès dans {output_file} !")
+    print(f"DEBUG: Site généré avec succès dans {output_file} !") # Debug print
 
 if __name__ == "__main__":
-    # Importe la bibliothèque html pour html.unescape
-    import html 
-    
-    # Assure-toi d'installer 'requests' si ce n'est pas déjà fait : pip install requests
-    # Dans ton terminal: pip install requests
     generate_html_from_rss(RSS_FEED_URL, OUTPUT_HTML_FILE)
