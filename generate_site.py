@@ -16,7 +16,7 @@ def generate_html_from_rss(rss_url, output_file):
         root = ET.fromstring(response.content)
 
     except requests.exceptions.RequestException as e:
-        print(f"DEBUG: Erreur de connexion au flux RSS: {e}") # Debug print
+        # print(f"DEBUG: Erreur de connexion au flux RSS: {e}") # Debug print - REMOVED
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(f"""
 <!DOCTYPE html>
@@ -26,6 +26,9 @@ def generate_html_from_rss(rss_url, output_file):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erreur de Chargement</title>
     <link rel="stylesheet" href="chef_d_oeuvre.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -38,7 +41,7 @@ def generate_html_from_rss(rss_url, output_file):
             """)
         return
     except ET.ParseError as e:
-        print(f"DEBUG: Erreur de parsing XML: {e}") # Debug print
+        # print(f"DEBUG: Erreur de parsing XML: {e}") # Debug print - REMOVED
         with open(output_file, 'w', encoding='utf-8') as f:
             f.write(f"""
 <!DOCTYPE html>
@@ -48,6 +51,9 @@ def generate_html_from_rss(rss_url, output_file):
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Erreur de Parsing</title>
     <link rel="stylesheet" href="chef_d_oeuvre.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
@@ -69,7 +75,8 @@ def generate_html_from_rss(rss_url, output_file):
     <title>Mes Films & Critiques Letterboxd - Oni Lechan</title>
     <link rel="stylesheet" href="chef_d_oeuvre.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-</head>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> </head>
 <body>
     <header class="main-header">
         <div class="container">
@@ -86,39 +93,49 @@ def generate_html_from_rss(rss_url, output_file):
                 <div class="film-grid">
 """
     
-    # DEBUG : Compteur pour voir combien d'items sont traités
-    item_count = 0 
+    # DEBUG : Compteur pour voir combien d'items sont traités - REMOVED
+    # item_count = 0 
 
     for item in root.findall('.//item'):
-        item_count += 1 # Incrémente le compteur
+        # item_count += 1 # Incrémente le compteur - REMOVED
         
         full_title = item.find('title').text if item.find('title') is not None else ''
         link = item.find('link').text if item.find('link') is not None else '#'
         description_html = item.find('description').text if item.find('description') is not None else ''
         
-        # DEBUG : Affiche le titre de chaque film trouvé
-        print(f"DEBUG: Traitement du film: {full_title}") 
+        # DEBUG : Affiche le titre de chaque film trouvé - REMOVED
+        # print(f"DEBUG: Traitement du film: {full_title}") 
 
         # Extraire le titre du film et l'année
         match_title = re.match(r'^(.*?),\s*(\d{4})', full_title)
         film_title = match_title.group(1).strip() if match_title else full_title
         film_year = match_title.group(2) if match_title else ''
 
-        # Extraire la note
-        rating_stars = ''
-        match_rating = re.search(r'★+', full_title)
-        if match_rating:
-            rating_stars = match_rating.group(0)
-        else:
-            lb_member_rating = item.find('{https://letterboxd.com}memberRating')
-            if lb_member_rating is not None and lb_member_rating.text:
-                try:
-                    rating_value = float(lb_member_rating.text)
-                    rating_stars = '★' * int(rating_value)
-                    if rating_value - int(rating_value) >= 0.5:
-                        rating_stars += '½'
-                except ValueError:
-                    pass
+        # --- GESTION DES ÉTOILES AVEC FONT AWESOME ---
+        rating_html = ''
+        lb_member_rating = item.find('{https://letterboxd.com}memberRating')
+        if lb_member_rating is not None and lb_member_rating.text:
+            try:
+                rating_value = float(lb_member_rating.text)
+                rating_html = '<span class="rating-stars">'
+                for _ in range(int(rating_value)): # Étoiles pleines
+                    rating_html += '<i class="fas fa-star"></i>'
+                if rating_value - int(rating_value) >= 0.5: # Demi-étoile
+                    rating_html += '<i class="fas fa-star-half-alt"></i>'
+                # Ajouter des étoiles vides pour un total de 5, si désiré
+                for _ in range(int(5 - rating_value - (0.5 if rating_value - int(rating_value) >= 0.5 else 0))):
+                     rating_html += '<i class="far fa-star"></i>'
+                rating_html += '</span>'
+            except ValueError:
+                pass
+        # Si la note n'est pas numérique mais qu'il y a des étoiles dans le titre (ex: ★★★★★)
+        elif re.search(r'★+', full_title):
+            num_full_stars = len(re.search(r'★+', full_title).group(0))
+            rating_html = '<span class="rating-stars">'
+            for _ in range(num_full_stars):
+                rating_html += '<i class="fas fa-star"></i>'
+            rating_html += '</span>'
+        # --- FIN GESTION ÉTOILES ---
 
         # Extraire l'URL de l'image de la description HTML
         image_url = ''
@@ -128,14 +145,13 @@ def generate_html_from_rss(rss_url, output_file):
 
         # Extraire le texte de la critique de la description HTML
         review_text = description_html
-        # Supprime tout avant le premier <p> après l'image (si l'image est bien dans un <p>)
-        review_text = re.sub(r'^.*?<p>(.*?)<\/p>', r'\1', review_text, 1, flags=re.DOTALL)
+        review_text = re.sub(r'^.*?<p>(.*?)<\/p>', r'\1', review_text, 1, flags=re.DOTALL) # Supprime tout avant le premier <p> après l'image
         review_text = re.sub(r'<[^>]+>', '', review_text).strip() # Supprime toutes les balises HTML restantes
         review_text = review_text.replace('&nbsp;', ' ').replace('&#8230;', '...').replace('…', '...') # Nettoyage des entités
         review_text = html.unescape(review_text) # Utilise html.unescape pour bien gérer toutes les entités HTML
         
-        # DEBUG : Affiche le texte de la critique extrait (les 100 premiers caractères)
-        print(f"DEBUG: Review text (first 100 chars): {review_text[:100]}...")
+        # DEBUG : Affiche le texte de la critique extrait (les 100 premiers caractères) - REMOVED
+        # print(f"DEBUG: Review text (first 100 chars): {review_text[:100]}...")
 
         formatted_review_text = review_text.replace('\n', '<br />')
 
@@ -144,7 +160,7 @@ def generate_html_from_rss(rss_url, output_file):
                 {f'<img src="{image_url}" alt="Affiche de {film_title}" class="film-poster">' if image_url else ''}
                 <div class="film-content">
                     <h3 class="film-title">{film_title} ({film_year})</h3>
-                    {f'<p class="film-rating">Note: {rating_stars}</p>' if rating_stars else ''}
+                    {f'<p class="film-rating">Note: {rating_html}</p>' if rating_html else ''}
                     <p class="film-review-text">{formatted_review_text}</p>
                     <a href="{link}" target="_blank" rel="noopener noreferrer" class="button-letterboxd">Voir sur Letterboxd</a>
                 </div>
@@ -165,12 +181,12 @@ def generate_html_from_rss(rss_url, output_file):
 </body>
 </html>
 """
-    # DEBUG : Affiche le nombre total d'items traités
-    print(f"DEBUG: Nombre total de films traités: {item_count}") 
+    # DEBUG : Affiche le nombre total d'items traités - REMOVED
+    # print(f"DEBUG: Nombre total de films traités: {item_count}") 
 
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(html_output)
-    print(f"DEBUG: Site généré avec succès dans {output_file} !") # Debug print
+    # print(f"DEBUG: Site généré avec succès dans {output_file} !") # Debug print - REMOVED
 
 if __name__ == "__main__":
     generate_html_from_rss(RSS_FEED_URL, OUTPUT_HTML_FILE)
