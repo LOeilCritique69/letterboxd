@@ -15,6 +15,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with: # <--- AJOUTE CETTE LIGNE
+        clean: true # <--- AJOUTE CETTE LIGNE
 
     - name: Set up Python
       uses: actions/setup-python@v5
