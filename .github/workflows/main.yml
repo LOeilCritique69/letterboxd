@@ -1,9 +1,12 @@
 name: Generate and Deploy Letterboxd Site
 
 on:
-  workflow_dispatch: # Permet de déclencher manuellement la workflow
+  workflow_dispatch:
   schedule:
     - cron: '0 4 * * *' # Exécute tous les jours à 4h00 UTC (ajuste si besoin pour ton fuseau horaire)
+
+permissions: # <--- AJOUTE CETTE SECTION ICI
+  contents: write # <--- CELA DONNE LA PERMISSION D'ÉCRIRE SUR LE DÉPÔT
 
 jobs:
   build_and_deploy:
@@ -16,7 +19,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v5
       with:
-        python-version: '3.x' # Utilise la dernière version de Python 3
+        python-version: '3.x'
 
     - name: Install dependencies
       run: |
