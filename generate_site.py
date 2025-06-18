@@ -80,7 +80,7 @@ def generate_html_from_rss(rss_url, output_file):
 <body>
     <header class="main-header">
         <div class="container">
-            <h1 class="site-title">Mes Chef-d'Œuvres Cinématographiques</h1>
+            <h1 class="site-title">Mes Avis Letterboxd !</h1>
             <p class="site-tagline">Les films que j'ai notés, avec mes critiques détaillées.</p>
             <a href="https://letterboxd.com/oni_le_chan/" target="_blank" class="letterboxd-link">Mon Profil Letterboxd</a>
         </div>
