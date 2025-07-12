@@ -146,7 +146,7 @@ def generate_html_from_rss(rss_url, output_file):
 
         # Extraire le texte de la critique de la description HTML
         review_text = description_html
-        review_text = re.sub(r'^.*?<p>(.*?)<\/p>', r'\1', review_text, 1, flags=re.DOTALL) # Supprime tout avant le premier <p> après l'image
+        review_text = re.sub(r'^.*?<p>(.*?)<\/p>', r'\1', review_text, count=1, flags=re.DOTALL) # Supprime tout avant le premier <p> après l'image
         review_text = re.sub(r'<[^>]+>', '', review_text).strip() # Supprime toutes les balises HTML restantes
         review_text = review_text.replace('&nbsp;', ' ').replace('&#8230;', '...').replace('…', '...') # Nettoyage des entités
         review_text = html.unescape(review_text) # Utilise html.unescape pour bien gérer toutes les entités HTML
