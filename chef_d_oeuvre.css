@@ -1,0 +1,390 @@
+/* --- VARIABLES MODERNISÉES --- */
+:root {
+  --primary-color: #121212;
+  --secondary-color: #b22222;
+  --background-color: #121212;
+  --accent-color: #e50914;
+  --text-color-dark: #e0e0e0;
+  --text-color-light: #ffffff;
+  --border-radius-base: 10px;
+  --transition-speed: 0.3s;
+  --font-family-headings: 'Cinzel', serif;
+  --font-family-body: 'Roboto Condensed', sans-serif;
+  --font-size-base: 16px;
+  --line-height-base: 1.6;
+  --spacing-base: 24px;
+  --card-bg-color: #1c1c1c;
+  --shadow-light: rgba(0, 0, 0, 0.15);
+  --shadow-medium: rgba(0, 0, 0, 0.5);
+}
+
+/* --- RESET --- */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--background-color);
+  background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" fill="none"><circle cx="20" cy="20" r="1" fill="%231c1c1c" /></svg>');
+  background-repeat: repeat;
+  font-family: var(--font-family-body);
+  font-size: var(--font-size-base);
+  color: var(--text-color-dark);
+  line-height: var(--line-height-base);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: var(--spacing-base);
+}
+
+/* --- HEADER REFAIT --- */
+.main-header {
+  background-color: #1c1c1c;
+  padding: 1.5rem 2rem;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+.main-header .container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: nowrap;
+}
+
+.site-title {
+  font-family: 'Cinzel', serif;
+  font-size: 2.4rem;
+  color: #ffd700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Menu liens à droite */
+.header-menu {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.letterboxd-link {
+  padding: 0.8rem 1.8rem;
+  background: linear-gradient(135deg, #b22222, #7a0e0e);
+  color: #ffffff;
+  font-weight: 700;
+  border-radius: 10px;
+  box-shadow: 0 3px 6px rgba(178, 34, 34, 0.6), inset 0 -3px 5px rgba(255, 0, 0, 0.4);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.4s ease, box-shadow 0.3s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.letterboxd-link:hover {
+  background: linear-gradient(135deg, #e50914, #a11111);
+  box-shadow: 0 6px 12px rgba(229, 9, 20, 0.8), inset 0 -4px 7px rgba(255, 40, 40, 0.6);
+  transform: translateY(-2px);
+}
+
+.letterboxd-link:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(178, 34, 34, 0.7), inset 0 3px 5px rgba(150, 0, 0, 0.8);
+}
+
+/* --- MAIN --- */
+.main-content {
+  flex-grow: 1;
+  padding: 4rem 0;
+}
+
+.section-title {
+  font-family: var(--font-family-headings);
+  font-size: 3rem;
+  color: var(--accent-color);
+  text-align: center;
+  margin-bottom: 3rem;
+  position: relative;
+  padding-bottom: 1rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 80px;
+  height: 4px;
+  background-color: var(--secondary-color);
+  margin: 1rem auto 0;
+  border-radius: 2px;
+}
+
+/* --- FILM GRID --- */
+.film-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
+/* --- FILM ITEM --- */
+.film-item {
+  display: flex;
+  flex-direction: row;
+  background-color: var(--card-bg-color);
+  border-radius: var(--border-radius-base);
+  box-shadow: 0 6px 20px var(--shadow-light);
+  overflow: hidden;
+  max-width: 100%;
+  transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, box-shadow;
+  cursor: pointer;
+}
+
+.film-item:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 16px 35px rgba(0, 0, 0, 0.65);
+}
+
+/* Poster image - sans zoom au hover */
+.film-poster {
+  width: 180px;
+  height: auto;
+  object-fit: cover;
+  flex-shrink: 0;
+  transition: none;
+}
+
+/* Content container */
+.film-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px;
+  flex-grow: 1;
+  gap: 10px;
+  color: var(--text-color-light);
+}
+
+/* Film title */
+.film-title {
+  font-family: var(--font-family-headings);
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text-color-light);
+}
+
+/* Film rating */
+.film-rating {
+  font-size: 1rem;
+  color: var(--accent-color);
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.rating-stars i {
+  color: #ffcc00;
+  margin-right: 3px;
+}
+
+/* Film review text */
+.film-review-text {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--text-color-dark);
+  white-space: pre-wrap;
+  margin-bottom: 20px;
+}
+
+/* Letterboxd button */
+.button-letterboxd {
+  align-self: flex-start;
+  padding: 10px 18px;
+  background-color: var(--secondary-color);
+  color: var(--text-color-light);
+  border-radius: var(--border-radius-base);
+  font-weight: 700;
+  text-decoration: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  user-select: none;
+  cursor: pointer;
+}
+
+.button-letterboxd:hover {
+  background-color: #8a1818;
+  box-shadow: 0 0 12px var(--secondary-color);
+}
+
+/* --- LISTES LETTERBOXD --- */
+.mes-listes .film-item {
+    display: flex;
+    align-items: flex-start;
+    background-color: var(--card-bg-color);
+    border-radius: var(--border-radius-base);
+    padding: 15px;
+    gap: 20px;
+    transition: transform var(--transition-speed), box-shadow var(--transition-speed);
+}
+
+.mes-listes .film-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px var(--shadow-medium);
+}
+
+.mes-listes .film-poster {
+    width: 160px;
+    height: auto;
+    object-fit: cover;
+    border-radius: var(--border-radius-base);
+    flex-shrink: 0;
+}
+
+.mes-listes .film-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: var(--text-color-light);
+}
+
+.mes-listes .film-title {
+    font-family: var(--font-family-headings);
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--accent-color);
+    margin-bottom: 8px;
+}
+
+.mes-listes ol {
+    padding-left: 20px;
+    margin: 0;
+    list-style: decimal inside;
+    color: var(--text-color-light);
+}
+
+.mes-listes ol li {
+    margin-bottom: 4px;
+    line-height: 1.4;
+    font-size: 1rem;
+}
+
+/* Bouton Letterboxd pour les listes */
+.mes-listes .button-letterboxd {
+    align-self: flex-start;
+    margin-top: 10px;
+    padding: 8px 16px;
+}
+
+/* --- FOOTER --- */
+.main-footer {
+  background-color: var(--primary-color);
+  color: var(--text-color-light);
+  text-align: center;
+  padding: 2rem 0;
+  font-size: 0.9rem;
+  box-shadow: 0 -4px 15px var(--shadow-medium);
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 992px) {
+  .site-title {
+    font-size: 2.2rem;
+  }
+  .section-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 1rem;
+  }
+  .site-title {
+    font-size: 2rem;
+  }
+  .section-title {
+    font-size: 2rem;
+    margin-bottom: 2rem;
+  }
+
+  .film-item {
+    flex-direction: column;
+  }
+
+  .film-poster {
+    width: 100%;
+    height: auto;
+  }
+
+  .film-content {
+    padding: 16px;
+    align-items: center;
+    text-align: center;
+    gap: 8px;
+  }
+
+  .film-title {
+    font-size: 1.5rem;
+  }
+
+  .film-rating {
+    font-size: 1rem;
+    margin-bottom: 8px;
+  }
+
+  .film-review-text {
+    font-size: 0.95rem;
+  }
+
+  .button-letterboxd {
+    align-self: center;
+    font-size: 0.9rem;
+    padding: 10px 20px;
+  }
+
+  .mes-listes .film-item {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .mes-listes .film-poster {
+      max-width: 300px;
+      margin-bottom: 12px;
+  }
+
+  .mes-listes .film-content {
+      align-items: center;
+      text-align: center;
+  }
+
+  .mes-listes ol li {
+      font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-title {
+    font-size: 1.6rem;
+  }
+  .section-title {
+    font-size: 1.6rem;
+  }
+}
+@media (max-width: 360px) {
+  .site-title {
+    font-size: 1.4rem;
+  }
+  .section-title {
+    font-size: 1.4rem;
+  }
+}
