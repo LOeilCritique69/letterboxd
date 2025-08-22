@@ -39,10 +39,12 @@ def generate_films_html(rss_url, output_file):
         match_img = re.search(r'<img src="(.*?)"', description_html)
         image_url = match_img.group(1) if match_img else ''
 
+        # --- Extraction et nettoyage de la review ---
         review_text = description_html
         review_text = re.sub(r'^.*?<p>(.*?)<\/p>', r'\1', review_text, count=1, flags=re.DOTALL)
         review_text = re.sub(r'<[^>]+>', '', review_text).strip()
         review_text = html.unescape(review_text)
+        review_text = review_text.replace("This review may contain spoilers. ", "")  # ← suppression des spoilers
         review_text = review_text.replace('\n', '<br />')
 
         lb_member_rating = item.find('{https://letterboxd.com}memberRating')
