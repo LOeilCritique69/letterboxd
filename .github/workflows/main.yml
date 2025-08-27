@@ -44,6 +44,6 @@ jobs:
 
     - name: Commit and push changes
       run: |
-        git add index.html
+        git add .
         git commit -m "Update site content from Letterboxd RSS" || echo "No changes to commit"
         git push
