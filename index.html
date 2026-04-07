@@ -3,9 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mes Films & Critiques - Oni Lechan</title>
+  <meta name="description" content="Critiques de films par Oni Lechan — données issues de Letterboxd.">
+  <title>CritiqueBox — Oni Lechan</title>
   <link rel="stylesheet" href="chef_d_oeuvre.css">
-  <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;700&family=Cinzel:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
 </head>
 
@@ -14,62 +15,169 @@
   <!-- === HEADER === -->
   <header class="main-header">
     <div class="container">
-      <h1 class="site-title">CritiqueBox</h1>
-      <div class="header-links">
-        <a class="letterboxd-link" href="https://letterboxd.com/oni_le_chan/" target="_blank">Profil Letterboxd</a>
-        <a class="letterboxd-link" href="https://l-oeil-critique.netlify.app/" target="_blank">Accueil</a>
+      <div class="header-brand">
+        <div>
+          <h1 class="site-title">Critique<em>Box</em></h1>
+          <p class="header-tagline">Chroniques cinématographiques</p>
+        </div>
       </div>
+      <nav class="header-nav">
+        <div class="header-links">
+          <a class="nav-link-primary" href="https://letterboxd.com/oni_le_chan/" target="_blank" rel="noopener">
+            <i class="fas fa-film" style="font-size:0.6rem; margin-right:0.4rem;"></i>Profil Letterboxd
+          </a>
+          <a class="nav-link" href="https://l-oeil-critique.netlify.app/" target="_blank" rel="noopener">Accueil</a>
+        </div>
+      </nav>
     </div>
   </header>
 
+  <!-- === HERO === -->
+  <div class="hero-band">
+    <div class="hero-inner">
+      <div class="hero-title-group">
+        <p class="hero-eyebrow">— Dernières entrées</p>
+        <h2 class="section-title">Mes<em>Critiques</em></h2>
+      </div>
+      <div class="hero-meta">
+        <span class="hero-count" id="film-count">—</span>
+        <span class="hero-count-label">films recensés</span>
+      </div>
+    </div>
+  </div>
+
   <!-- === MAIN === -->
-  <main class="main-content">
-    <div class="container">
-      <!-- SECTION CRITIQUES -->
+  <main>
+    <div class="page-layout">
+
+      <!-- CRITIQUES -->
       <section class="critiques-films">
-        <h2 class="section-title">Dernières Critiques</h2>
-        <div class="film-grid" id="reviews-container"></div>
+        <div class="film-grid" id="reviews-container">
+          <p style="font-family:'Space Mono',monospace;font-size:0.75rem;color:rgba(245,240,232,0.3);padding:3rem 0;">
+            Chargement des critiques…
+          </p>
+        </div>
       </section>
 
       <!-- SIDEBAR -->
       <aside class="sidebar-rating">
-        <h3 class="sidebar-title">Barème Letterboxd</h3>
-        <div class="star-rating-guide">
-          <span>⭐️⭐️⭐️⭐️⭐️ = <b>PEAK CINEMA</b></span>
-          <span>⭐️⭐️⭐️⭐️½ = <b>Chef-d'œuvre</b></span>
-          <span>⭐️⭐️⭐️⭐️ = <b>Excellent</b></span>
-          <span>⭐️⭐️⭐️½ = <b>Mérite d’être vu</b></span>
-          <span>⭐️⭐️⭐️ = <b>Bon film</b></span>
-          <span>⭐️⭐️½ = <b>Basique</b></span>
-          <span>⭐️⭐️ = <b>Moyen</b></span>
-          <span>⭐️½ = <b>Nul</b></span>
-          <span>⭐️ = <b>Catastrophique</b></span>
-          <span>½ = <b>Atrocité</b></span>
+        <div class="sidebar-inner">
+          <div>
+            <h3 class="sidebar-title">Barème de notation</h3>
+            <p class="sidebar-subtitle">Échelle Letterboxd / 5 étoiles</p>
+            <div class="star-rating-guide" id="rating-guide"></div>
+          </div>
+          <div class="sidebar-profile">
+            <a class="profile-link" href="https://letterboxd.com/oni_le_chan/" target="_blank" rel="noopener">
+              <div class="profile-avatar">O</div>
+              <div class="profile-info">
+                <span class="profile-name">Oni Lechan</span>
+                <span class="profile-handle">@oni_le_chan · Letterboxd</span>
+              </div>
+            </a>
+          </div>
         </div>
       </aside>
+
     </div>
   </main>
 
   <!-- === FOOTER === -->
   <footer class="main-footer">
-    <p>&copy; 2025 Oni Lechan — Données issues de Letterboxd RSS.</p>
+    <div class="footer-inner">
+      <span class="footer-brand">CritiqueBox</span>
+      <span class="footer-copy">&copy; 2025 Oni Lechan — Données issues de Letterboxd RSS</span>
+    </div>
   </footer>
 
-  <!-- === SCRIPT === -->
+  <!-- === SCRIPTS === -->
   <script>
-  // --- HEADER SCROLL EFFECT ---
+  // ---- HEADER SCROLL ----
+  const header = document.querySelector('.main-header');
   window.addEventListener('scroll', () => {
-    const header = document.querySelector('.main-header');
-    header.classList.toggle('scrolled', window.scrollY > 50);
+    header.classList.toggle('scrolled', window.scrollY > 40);
+  }, { passive: true });
+
+  // ---- RATING GUIDE ----
+  const RATINGS = [
+    { stars: 5,   half: false, label: 'PEAK CINEMA' },
+    { stars: 4,   half: true,  label: 'Chef-d\'œuvre' },
+    { stars: 4,   half: false, label: 'Excellent' },
+    { stars: 3,   half: true,  label: 'Mérite d\'être vu' },
+    { stars: 3,   half: false, label: 'Bon film' },
+    { stars: 2,   half: true,  label: 'Basique' },
+    { stars: 2,   half: false, label: 'Moyen' },
+    { stars: 1,   half: true,  label: 'Nul' },
+    { stars: 1,   half: false, label: 'Catastrophique' },
+    { stars: 0,   half: true,  label: 'Atrocité' },
+  ];
+
+  function buildStars(full, half) {
+    let html = '';
+    for (let i = 0; i < full; i++) html += '<i class="fas fa-star"></i>';
+    if (half) html += '<i class="fas fa-star-half-alt"></i>';
+    const empty = 5 - full - (half ? 1 : 0);
+    for (let i = 0; i < empty; i++) html += '<i class="far fa-star"></i>';
+    return html;
+  }
+
+  const guide = document.getElementById('rating-guide');
+  RATINGS.forEach(r => {
+    const row = document.createElement('div');
+    row.className = 'rating-row';
+    row.innerHTML = `
+      <span class="rating-row-stars">${buildStars(r.stars, r.half)}</span>
+      <span class="rating-row-label">${r.label}</span>
+    `;
+    guide.appendChild(row);
   });
 
-  // --- LOAD REVIEWS ---
-  document.addEventListener("DOMContentLoaded", () => {
+  // ---- LOAD REVIEWS ----
+  document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('reviews-container');
+    const countEl   = document.getElementById('film-count');
+
     fetch('films.html')
-      .then(res => res.ok ? res.text() : Promise.reject(`Erreur chargement: ${res.status}`))
-      .then(html => container.innerHTML = html)
-      .catch(err => container.innerHTML = `<p class="error-message">${err}</p>`);
+      .then(res => res.ok ? res.text() : Promise.reject(`Erreur ${res.status}`))
+      .then(html => {
+        container.innerHTML = html;
+
+        // Number the items + add expand buttons
+        const items = container.querySelectorAll('.film-item');
+        countEl.textContent = items.length;
+
+        items.forEach((item, i) => {
+          item.setAttribute('data-index', String(i + 1).padStart(2, '0'));
+
+          const review = item.querySelector('.film-review-text');
+          if (!review) return;
+
+          // Only show expand button if content is long enough
+          if (review.scrollHeight > 170) {
+            const actions = item.querySelector('.film-actions');
+            if (actions) {
+              const btn = document.createElement('button');
+              btn.className = 'button-expand';
+              btn.innerHTML = '<span>Lire la suite</span><i class="fas fa-chevron-down icon-expand"></i>';
+              btn.addEventListener('click', () => {
+                const expanded = review.classList.toggle('expanded');
+                btn.classList.toggle('active', expanded);
+                btn.querySelector('span').textContent = expanded ? 'Réduire' : 'Lire la suite';
+              });
+              actions.appendChild(btn);
+            }
+          } else {
+            // Short review: remove mask
+            review.style.maxHeight = 'none';
+            review.style.maskImage = 'none';
+            review.style.webkitMaskImage = 'none';
+          }
+        });
+      })
+      .catch(err => {
+        container.innerHTML = `<p class="error-message">Impossible de charger les critiques : ${err}</p>`;
+        countEl.textContent = '0';
+      });
   });
   </script>
 
